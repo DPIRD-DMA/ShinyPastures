@@ -12,10 +12,13 @@
 LeafletPlot <- function(propname){
   
    #these will always be the most recent date.  Moving to new folder, with projection pre-done.  
-  latestPGR <- list.files("./data/Maps_for_shiny_Mercator/", pattern="^PGR", full.names=TRUE)
-  latestFOO <- list.files("./data/Maps_for_shiny_Mercator/", pattern="^FOO", full.names=TRUE)
-   rPGR <- raster(latestPGR)
-   rFOO <- raster(latestFOO)
+  #latestPGR <- list.files("./data/Maps_for_shiny_Mercator/", pattern="^PGR", full.names=TRUE)
+  #latestFOO <- list.files("./data/Maps_for_shiny_Mercator/", pattern="^FOO", full.names=TRUE)
+  # rPGR <- raster(latestPGR)
+  #rFOO <- raster(latestFOO)
+   
+   load(file="./data/Maps_for_shiny_Mercator/leafMaps.rda")
+   
    #rPGR <- ras[[nlayers(ras)]]
    #rFOO <- rasFOO[[nlayers(rasFOO)]]
    #propname <- Props
