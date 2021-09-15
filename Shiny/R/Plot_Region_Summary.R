@@ -111,7 +111,7 @@ plotRegionSummary <- function(inTable, inThisYear, OtherYears, PropID ){  #event
   #                            showlegend = T, name = paste0(topyrs$yr[3]))
   
   # "This Year line - in orange
-  fig <- fig %>% add_trace(x= ~inData2$DayOfYear, y = ~inData2$Mean,  type = 'scatter', mode = 'markers+lines',
+  fig <- fig %>% add_trace(x= ~as.Date(inData2$DayOfYear), y = ~inData2$Mean,  type = 'scatter', mode = 'markers+lines',
                            marker = list(color = 'rgba(255, 110, 52, 1)', size = 8),
                            line = list(color = 'rgba(255, 110, 52, 1)',width = 3),
                            showlegend = T, name = 'This year')

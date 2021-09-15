@@ -31,7 +31,7 @@ plotFOOmaps <- function(rasStack, layernum, rgn, prop, TblDates){
     
     # Now "layernum" is a date, need to look up number
     rastNum <- TblDates[TblDates$NiceDate == layernum, 1]
-    e <- extent(prop[prop$PROPERTY_I == rgn,])  #adding 0.2 expands the extent equally in all directions (buffer)
+    e <- raster::extent(prop[prop$PROPERTY_I == rgn,])  #adding 0.2 expands the extent equally in all directions (buffer)
     
     #### NEXT SECTION ADDS IMAGERY
         # location of imagery for plots of properties  

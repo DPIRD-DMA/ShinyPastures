@@ -48,10 +48,6 @@ f2 <- "ThisYear_timeseries_Props_FOO"
 file.copy(pImage, paste0(writeDir, "/PGR_for_shiny"))
 file.copy(fImage, paste0(writeDir, "/FOO_for_shiny"))
 
-rPGR<- raster(pImage)
-rFOO <- raster(fImage)
-# save as R format.  Could omit tifs above?
-save(rPGR, rFOO, file="./Shiny/data/Maps_for_shiny_Mercator/leafMaps.rda")
 
 ## NEW FILE TYPES -- not saving previous drafts this to save space
 #file.copy(paste0(writeDir, "/", p2, ".feather"), paste0(writeDir, "/PreviousDraft"), copy.date=TRUE, overwrite=TRUE)
@@ -79,6 +75,9 @@ writeRaster(pR1, paste0(writeDir, "/Maps_for_shiny_Mercator/", basename(pImage))
 fR <- raster(fImage)
 fR1 <- projectRaster(fR, crs = CRS(SRS_string = "EPSG:3857"), method = "ngb")
 writeRaster(fR1, paste0(writeDir, "/Maps_for_shiny_Mercator/", basename(fImage)), format="GTiff", overwrite=TRUE)
+
+# save as R format.  Could omit tifs above?
+save(pR1, fR1, file="./Shiny/data/Maps_for_shiny_Mercator/leafMaps.rda")
 
 # this saves as native r format - hopefully faster. 
 source("./PrepData/Scripts_prep/CODE_save_final_files_as_rda.R")

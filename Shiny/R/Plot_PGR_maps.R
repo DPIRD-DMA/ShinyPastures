@@ -11,8 +11,8 @@
 
 plotPGRmaps <- function(rasStack, layernum, rgn, prop, TblDates){  # newmarker
   #plotPGRmaps(ras, 11, "1264350", "X2021.03.17", Props, imageDatesTbl)
-  # rasStack <- ras
-  #  layernum <- "30-Dec" # coming in as NiceDate = 12-Jan
+   #rasStack <- ras
+  #  layernum <- "07-Sep" # coming in as NiceDate = 12-Jan
   #  rgn <- c(1264350)
   #  prop <- Props
   #  TblDates <- imageDatesTbl
