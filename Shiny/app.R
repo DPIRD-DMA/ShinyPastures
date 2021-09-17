@@ -3,23 +3,22 @@
 #  25 May - changing all selection properties, to get rid of "select" buttons
 #        - also removing tool tips, given it is shown in box on the side. I think this is more important  
 #        - because you can see it from the other tabs
-options("rgdal_show_exportToProj4_warnings"="none") 
-#suppressPackageStartupMessages()
+options("rgdal_show_exportToProj4_warnings"="none")  #suppressPackageStartupMessages()
 
-library(raster)
+library(raster) #
 library(shiny)
 library(shinydashboard)
 library(leaflet)
-library(rgdal)
-library(ggplot2)
+library(rgdal) #
+library(ggplot2) 
 library(shinyWidgets)
 library(shinycssloaders)
 library(shinyjs)
 library(plotly)
 #library(rosm)  # this for plotting esri images
-library(rgeos)
-library(dqshiny)
-library(plyr)
+library(rgeos) #
+library(dqshiny) #  drop down boxes
+library(plyr) # i think ggplot needs this??
 
 #need?
 #library(pracma) 
@@ -38,9 +37,10 @@ source("./R/Calc_interpolate_dates.R")
 ##################################################################################
 #### Read in datasets and prep   ################
 # property shapefiles: some formatting done in script CODE_Property_PIC_list_formatting.R
-#Props <- readOGR("./data/OtherData", 
-#                 layer = "Props_for_shiny_16Aug2021" )
+#Props <- readOGR("./data/OtherData", layer = "Props_for_shiny_16Aug2021" )
 Props <- readRDS("./data/OtherData/Props_shape.rds")
+#PropsPath <- "./data/Props.fgb"
+
 # lists for selecting properties: script CODE_Property_PIC_list_formatting.R
 propList <- readRDS("./data/OtherData/propList.rds")
 picList <- readRDS("./data/OtherData/picList.rds")
@@ -110,6 +110,11 @@ latestFOO <- list.files("./data/Maps_for_shiny_Mercator/", pattern="^FOO", full.
  pR1 <- raster(latestPGR) #in mercator for leaflet
  fR1 <- raster(latestFOO)
 
+# r <- brick(stack(pR1, fR1))
+# writeRaster(r, "./Shiny/data/mercator.nc", overwrite=TRUE, format="CDF",     varname="mostrecent",  
+#             longname="This week rasters", xname="Longitude",   yname="Latitude", zname="Time (Month)")
+# 
+#newr <- brick("./Shiny/data/mercator.nc")
 #################################################################################################
 
 # Define UI 
