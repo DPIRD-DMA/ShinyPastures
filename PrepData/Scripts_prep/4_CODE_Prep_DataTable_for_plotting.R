@@ -15,11 +15,11 @@ library(reshape2)
 # Limit fileList in this first section if only doing THIS YEAR.  
 
 #  set up for PGR
-startDir <- "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/PGR_cumulative"
+startDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/PGR_cumulative"
 Prefix <- "PGR"
 
 #   set up for FOO
-startDir <- "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/FOO"
+startDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/FOO"
 Prefix="FOO"
 
 ########################
@@ -32,7 +32,7 @@ outFileOthers <- paste0("OtherYears_timeseries_Props_", Prefix)  #this has other
 
 ###if only doing weekly update, limit fileList to THIS YEAR
 fileList <- fileList[18]
-print(fileList)
+
 ###########################
 
   #set up table names
@@ -93,7 +93,7 @@ thisyrdat <- dat.melt[dat.melt$yr == 2021, ]
 write.csv(thisyrdat, paste0(startDir, "/", outFileName, ".csv")) 
 #saveRDS(thisyrdat, paste0(startDir, "/", outFileName, ".rds")) 
 
-######################################
+
 if(length(fileList) == 1){
   print("Done updating files for this year.")
 } else{

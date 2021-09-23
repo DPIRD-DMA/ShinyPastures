@@ -2,12 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-PrepData/AgRegion_FOO_orig/
-PrepData/AgRegion_PGR_orig/
-PrepData/AgRegion_polygons/
-PrepData/FOO/
-PrepData/FOR_FAST_EXTRACT_RastStacks/
-PrepData/OtherData/
-PrepData/PGR/
-PrepData/PGR_cumulative/
-PrepData/TestingApp/
+PrepData/
+!PrepData/Scripts_prep/

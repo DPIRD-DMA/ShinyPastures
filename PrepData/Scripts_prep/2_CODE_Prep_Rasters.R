@@ -5,15 +5,15 @@
 library(raster)
 library(rgdal)
 
-startDir <- "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github"
+startDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4"
 setwd(startDir)
 
 ############################################
 #    writing cumulative rasters
 ############################################
 
-inDir <- "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/PGR"
-outDir2 <- "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/PGR_cumulative"
+inDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/PGR"
+outDir2 <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/PGR_cumulative"
 
 ThisYearOnly <- "TRUE"
 
@@ -30,7 +30,7 @@ if(ThisYearOnly == "TRUE") {
 
 #Loop over directories   -- Check if still has a colortable?  would this stop them showing up in qgis? and check for high values/adding
 for(j in 1:length(ListDir)){
-   #j=1  
+   #j=10  
   print(ListDir[j])
    all.files2<-list.files(ListDir[j], pattern="PGR2*", full.names=FALSE) #pattern=".tif$",
  

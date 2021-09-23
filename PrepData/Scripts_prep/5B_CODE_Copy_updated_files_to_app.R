@@ -76,12 +76,12 @@ fR <- raster(fImage)
 fR1 <- projectRaster(fR, crs = CRS(SRS_string = "EPSG:3857"), method = "ngb")
 writeRaster(fR1, paste0(writeDir, "/Maps_for_shiny_Mercator/", basename(fImage)), format="GTiff", overwrite=TRUE)
 
-# save as R format.  NO - rda's not working on shiny server, although work locally. 
-#save(pR1, fR1, file="./Shiny/data/Maps_for_shiny_Mercator/leafMaps.rda")
+# save as R format.  Could omit tifs above?
+save(pR1, fR1, file="./Shiny/data/Maps_for_shiny_Mercator/leafMaps.rda")
 
 # this saves as native r format - hopefully faster. 
-#source("./PrepData/Scripts_prep/CODE_save_final_files_as_rda.R")
-#SaveFilesAsRDA()
+source("./PrepData/Scripts_prep/CODE_save_final_files_as_rda.R")
+SaveFilesAsRDA()
 
 
 #######################################################################################

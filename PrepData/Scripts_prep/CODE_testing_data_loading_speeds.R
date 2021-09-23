@@ -126,40 +126,6 @@ in.feather = feather::read_feather("./data/Testing/other.feather")
 
 setwd("C:/ALL_PROJECTS/PastFromSpace_DRAFT4/ShinyPastures")
 
-
-## Test stack versus brick?? 
-
-
-inFiles <- list.files("./Shiny/data/FOO_for_shiny_dd", pattern=".tif$", full.names=TRUE)
-outPath <- "./data/FOO_for_shiny"
-
-rasterListFOO <- list.files("./Shiny/data/FOO_for_shiny", pattern=".tif$", full.names=T)
-
-b <- brick(stack(rasterListFOO))
-writeRaster(b, "rstack.nc", overwrite=TRUE, format="CDF",     varname="Foo", varunit="foounit", 
-            longname="FOO2021 -- raster stack to netCDF", xname="Longitude",   yname="Latitude", zname="Time (Month)")
-
-outfile <- writeRaster(brick, filename='grid.tif', format="GTiff", overwrite=TRUE,options=c("INTERLEAVE=BAND","COMPRESS=LZW"))
-benchmark <- microbenchmark(b1 = brick(stack(rasterListFOO)),
-                            b2 = brick("rstack.nc"), times = 1)
-print(benchmark, signif = 2)
-
-##
-latestPGR <- list.files("./Shiny/data/Maps_for_shiny_Mercator/", pattern="^PGR", full.names=TRUE)
-latestFOO <- list.files("./Shiny/data/Maps_for_shiny_Mercator/", pattern="^FOO", full.names=TRUE)
-pR1 <- raster(latestPGR) #in mercator for leaflet
-fR1 <- raster(latestFOO)   #crs = CRS(SRS_string = "EPSG:3857")
-
-saveRDS(pR1, file="pgr.rds")
-library(microbenchmark)
-benchmark <- microbenchmark(r1 = raster(latestPGR),
-                            r2 = readRDS("pgr.rds"), times = 10) # try this again in shiny??
-print(benchmark, signif = 2)
-
-
-
-
-
 ########################################
 library(profvis)
 library(shiny)
