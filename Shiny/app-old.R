@@ -3,23 +3,23 @@
 #  25 May - changing all selection properties, to get rid of "select" buttons
 #        - also removing tool tips, given it is shown in box on the side. I think this is more important  
 #        - because you can see it from the other tabs
-options("rgdal_show_exportToProj4_warnings"="none")  #suppressPackageStartupMessages()
+options("rgdal_show_exportToProj4_warnings"="none") 
+#suppressPackageStartupMessages()
 
-library(raster) #
-library(ncdf4)
+library(raster)
 library(shiny)
 library(shinydashboard)
 library(leaflet)
-library(rgdal) #
-library(ggplot2) 
+library(rgdal)
+library(ggplot2)
 library(shinyWidgets)
 library(shinycssloaders)
 library(shinyjs)
 library(plotly)
 #library(rosm)  # this for plotting esri images
-library(rgeos) #
-library(dqshiny) #  drop down boxes
-library(plyr) # i think ggplot needs this??
+library(rgeos)
+library(dqshiny)
+library(plyr)
 
 #need?
 #library(pracma) 
@@ -38,21 +38,58 @@ source("./R/Calc_interpolate_dates.R")
 ##################################################################################
 #### Read in datasets and prep   ################
 # property shapefiles: some formatting done in script CODE_Property_PIC_list_formatting.R
-
+#Props <- readOGR("./data/OtherData", 
+#                 layer = "Props_for_shiny_16Aug2021" )
 Props <- readRDS("./data/OtherData/Props_shape.rds")
-
 # lists for selecting properties: script CODE_Property_PIC_list_formatting.R
 propList <- readRDS("./data/OtherData/propList.rds")
 picList <- readRDS("./data/OtherData/picList.rds")
 
-# dates
-imageDatesTbl <- readRDS("./data/DatesTable.rds")
+####  RASTERS  ####
+# PGR
+rasterPath <- "./data/PGR_for_shiny"
+nameList <- list.files(rasterPath, pattern=".tif$", full.names=F)
+txtYear <- substr(nameList,4, 7)
+txtMonth <- substr(nameList,8, 9)
+txtDay <- substr(nameList,10, 11)
+rasterDate <- paste(txtYear, txtMonth, txtDay, sep="-")
 
-#read brick - assign names as imageDatesTbl$rasterDate
-ras <- brick("./data/pgr.nc")
-names(ras) <- imageDatesTbl$rasterDate
-rasFOO <- brick("./data/foo.nc")
-names(rasFOO) <- imageDatesTbl$rasterDate
+imageDatesTbl <- as.data.frame(cbind(1:length(rasterDate), rasterDate, txtYear, txtMonth, txtDay))
+imageDatesTbl$NiceDate <- format(as.Date(rasterDate), "%d-%b")   
+names(imageDatesTbl) <- c("rLayer", "rasterDate", "yr", "mth", "day", "NiceDate")
+
+#find raster names, read into a stack
+rasterList <- list.files(rasterPath, pattern=".tif$", full.names=T)
+ras <- stack(rasterList)
+names(ras)<- rasterDate
+
+# FOO  
+# dates are identical to PGR, so use same:  imageDatesTbl 
+rasterPathFOO <- "./data/FOO_for_shiny"
+
+#find raster names, read into a stack
+rasterListFOO <- list.files(rasterPathFOO, pattern=".tif$", full.names=T)
+rasFOO <- stack(rasterListFOO)
+names(rasFOO)<- rasterDate
+
+#### read in summary tables for plotting
+
+#DatSummary <- read.csv("./data/SummaryTable_timeseries_Props_PGR.csv")
+#ThisYearDat <- read.csv("./data/ThisYear_timeseries_Props_PGR.csv")
+#OtherYears <- read.csv("./data/OtherYears_timeseries_Props_PGR.csv") 
+
+#FooSummary <- read.csv("./data/SummaryTable_timeseries_Props_FOO.csv") #updated 9-June-2021 to include all years
+#ThisYearFOO <- read.csv("./data/ThisYear_timeseries_Props_FOO.csv")
+#OtherYearsFOO <- read.csv("./data/OtherYears_timeseries_Props_FOO.csv")# same
+
+#AS RDS files
+#DatSummary <- readRDS("./data/SummaryTable_timeseries_Props_PGR.rds")
+#ThisYearDat <- readRDS("./data/ThisYear_timeseries_Props_PGR.rds")
+#OtherYears <- readRDS("./data/OtherYears_timeseries_Props_PGR.rds") 
+
+#FooSummary <- readRDS("./data/SummaryTable_timeseries_Props_FOO.rds") 
+#ThisYearFOO <- readRDS("./data/ThisYear_timeseries_Props_FOO.rds")
+#OtherYearsFOO <- readRDS("./data/OtherYears_timeseries_Props_FOO.rds")
 
 # as feather
 DatSummary <- as.data.frame(feather::read_feather("./data/SummaryTable_timeseries_Props_PGR.feather"))
@@ -63,7 +100,11 @@ FooSummary <- as.data.frame(feather::read_feather("./data/SummaryTable_timeserie
 ThisYearFOO <- as.data.frame(feather::read_feather("./data/ThisYear_timeseries_Props_FOO.feather"))
 OtherYearsFOO <- as.data.frame(feather::read_feather("./data/OtherYears_timeseries_Props_FOO.feather"))
 
+#load(file="./data/inPolys.rda")
+#load(file="./data/inRasters.rda")
+
 # teh rda files don't seem to work well for rasters or stack
+#load(file="./data/Maps_for_shiny_Mercator/leafMaps.rda") #pR1 and fR1
 latestPGR <- list.files("./data/Maps_for_shiny_Mercator/", pattern="^PGR", full.names=TRUE)
 latestFOO <- list.files("./data/Maps_for_shiny_Mercator/", pattern="^FOO", full.names=TRUE)
  pR1 <- raster(latestPGR) #in mercator for leaflet
@@ -156,7 +197,7 @@ ui<-function(request){
                      box( 
                        height = 580, width=10,
                        title = "Growth this year", status = "warning", solidHeader = TRUE,
-                       plotOutput("rasPlot", click = "rasPlot_click", width = "100%", height=400), #withSpinner()
+                       withSpinner(plotOutput("rasPlot", click = "rasPlot_click", width = "100%", height=400)),
                        
                        #with shinyWidget
                        sliderTextInput(
@@ -165,13 +206,7 @@ ui<-function(request){
                          grid = TRUE, 
                          force_edges = TRUE,
                          choices = c(imageDatesTbl$NiceDate),
-                         selected=imageDatesTbl[nrow(imageDatesTbl), "NiceDate"],
-                         animate=TRUE, animationOptions(
-                           interval = 1000,
-                           loop = FALSE,
-                           playButton = TRUE,
-                           pauseButton = TRUE
-                         ))
+                         selected=imageDatesTbl[nrow(imageDatesTbl), "NiceDate"])
                      ),
                      box(height = 580, width=2,
                          tags$head(tags$style(HTML('.box{-webkit-box-shadow: none; -moz-box-shadow: none;box-shadow: none;}'))),
@@ -194,7 +229,7 @@ ui<-function(request){
                                         # h5(tags$i("<You must click on a pixel in the map above to view data >")),
                                         box(width = 9,
                                             #h5("Pasture growth (weekly) for current year."),
-                                            plotlyOutput("TSplot", height=350)), #withSpinner()
+                                            withSpinner(plotlyOutput("TSplot", height=350))),
                                         box(width = 3,
                                             tableOutput("df.pgr")
                                         )
@@ -208,7 +243,7 @@ ui<-function(request){
                        height = 580, width=10,
                        title = "Feed on offer this year", status = "warning", solidHeader = TRUE,
                        #div(img(src="FOO_color_legend.jpg", style="width: 90px"), style="float:right;"  ),  #style="float:right;"   style = 'position:absolute; right:1px;'
-                       plotOutput("fooPlot", click = "fooPlot_click", width = "100%", height=400), #withSpinner()
+                       withSpinner(plotOutput("fooPlot", click = "fooPlot_click", width = "100%", height=400)),
                        
                        #with shinyWidget
                        sliderTextInput(
@@ -217,13 +252,7 @@ ui<-function(request){
                          grid = TRUE, 
                          force_edges = TRUE,
                          choices = c(imageDatesTbl$NiceDate),
-                         selected=imageDatesTbl[nrow(imageDatesTbl), "NiceDate"],
-                         animate=TRUE, animationOptions(
-                           interval = 1000,
-                           loop = FALSE,
-                           playButton = TRUE,
-                           pauseButton = TRUE)
-                         )
+                         selected=imageDatesTbl[nrow(imageDatesTbl), "NiceDate"])
                        #verbatimTextOutput(outputId = "rngSlider") # prints value in box
                      ),
                      box(height = 200, width=2, 
@@ -247,7 +276,7 @@ ui<-function(request){
                                         #h5(tags$i("<You must click on a pixel in the map above to view data >")),
                                         box(width = 9,
                                             #h5("Pasture growth (weekly) for current year."),
-                                            plotlyOutput("TSplotFOO",height=350 )), # withSpinner()
+                                            withSpinner(plotlyOutput("TSplotFOO",height=350 ))),
                                         box(width = 3,
                                             tableOutput("df.foo")
                                         )
@@ -341,15 +370,12 @@ server <- function(input, output, session) {
         newzoom <- 10
       } 
       
-      
       #change style upon click event
       if(v$data[1] == "Selected"){
         proxy %>% removeShape(layerId = "Selected") 
       } else {
         proxy %>%
-          #setView(lng = selected$centLong, lat = selected$centLat, zoom = newzoom) %>%
-          flyTo(lng = selected$centLong, lat = selected$centLat, zoom = newzoom,
-                options=list(duration=1, easeLinearity=0.25)) %>%
+          setView(lng = selected$centLong, lat = selected$centLat, zoom = newzoom) %>%
           addPolygons(data = selected,
                       fill=FALSE, #fillColor = "yellow", fillOpacity = .6,
                       color = "#000000",
