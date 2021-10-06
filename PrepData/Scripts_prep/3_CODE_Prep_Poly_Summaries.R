@@ -19,19 +19,19 @@ library(sf)
 ##  Choose dataset  ##
 ######################
 
-startDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/PGR_cumulative"
+startDir <-  "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/PGR_cumulative"
 Pfix <- "Add"  # or uncomment next lines
 
 ## OR ##
 
-startDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/FOO"
+startDir <-  "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/FOO"
 Pfix <- "FOO"  #  if FOO, then it multiplies rasters by 10 to fix units.    
 
 
 setwd(startDir)
 
 #polys <- readOGR("C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/AgRegion_polygons", layer = "Props_for_shiny_16Aug2021")
-polys <- readOGR("C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/AgRegion_polygons", layer = "Props_for_shiny_3Sep2021")
+polys <- readOGR("C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/AgRegion_polygons", layer = "Props_for_shiny_3Sep2021")
 
 # export a text file to use to look up polygon names (PID, PIC)
 head(polys@data)
@@ -42,7 +42,7 @@ head(polys@data)
     #pre-sorting so ID's are increasing in number
   #write.csv(prop.lkup[order(prop.lkup$ID1),], "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/OtherData/Lookup_Prop_IDs.txt", row.names=FALSE)
   
-prop.lkup <- read.csv("C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/OtherData/Lookup_Prop_IDs.txt")
+prop.lkup <- read.csv("C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/OtherData/Lookup_Prop_IDs.txt")
 
 # need this spatial format for the faster extract function used below. 
 polys.sf <- st_as_sfc(polys) 

@@ -20,7 +20,7 @@ plotPGRmaps <- function(rasStack, layernum, rgn, prop, TblDates){  # newmarker
     par(xpd = FALSE)
     par(oma=c(0, 0, 0, 0), mar=c(1,1,1,1))
     
-    print(rasStack)
+    #print(rasStack)
     
     # set breakpoints and colors for ranges of values - write function for this plotting.
     # using fixed legend (jpg) 

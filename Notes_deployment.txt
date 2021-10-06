@@ -1,0 +1,3 @@
+# for shiny.io
+# set options first - default is 3Gb, but pastures needs more. max on plan is 8Gb.
+options(rsconnect.max.bundle.size=6500000000)

@@ -9,8 +9,8 @@
 
 # Copy new images from DataPrep to app folder
 ###############################################################################################################
-# images  ## THESE WILL CHANGE.  HOW TO AUTOMATE?  ONLY PART THAT WILL CHANGE UNTIL PATHS MOVE   ##############
-    #  Could use old/new list of images in the directory?? Find file dates?
+library(ncdf4)
+setwd("C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures")
 
 #pImage <- "./PrepData/PGR/y2021/PGR20210810 10 August 2021.tif"
 #fImage <- "./PrepData/FOO/y2021/FOO20210810 10 August 2021.tif"
@@ -42,11 +42,11 @@ f1 <- "OtherYears_timeseries_Props_FOO"
 f2 <- "ThisYear_timeseries_Props_FOO"
 
 ###########
-## COPY ##
+## Sort out rasters for shiny app ##
 
- # copy images
-file.copy(pImage, paste0(writeDir, "/PGR_for_shiny"))
-file.copy(fImage, paste0(writeDir, "/FOO_for_shiny"))
+# this saves rasters as netcdfs.  current version as of Sept. 2021 
+source("./PrepData/Scripts_prep/CODE_save_final_files_as_rda.R")
+SaveFilesAsRDA()
 
 
 ## NEW FILE TYPES -- not saving previous drafts this to save space
@@ -71,17 +71,9 @@ pR <- raster(pImage)
 pR1 <- projectRaster(pR, crs = CRS(SRS_string = "EPSG:3857"), method = "ngb")
 writeRaster(pR1, paste0(writeDir, "/Maps_for_shiny_Mercator/", basename(pImage)), format="GTiff", overwrite=TRUE)
 
-
 fR <- raster(fImage)
 fR1 <- projectRaster(fR, crs = CRS(SRS_string = "EPSG:3857"), method = "ngb")
 writeRaster(fR1, paste0(writeDir, "/Maps_for_shiny_Mercator/", basename(fImage)), format="GTiff", overwrite=TRUE)
-
-# save as R format.  Could omit tifs above?
-save(pR1, fR1, file="./Shiny/data/Maps_for_shiny_Mercator/leafMaps.rda")
-
-# this saves as native r format - hopefully faster. 
-source("./PrepData/Scripts_prep/CODE_save_final_files_as_rda.R")
-SaveFilesAsRDA()
 
 
 #######################################################################################

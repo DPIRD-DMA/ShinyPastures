@@ -18,7 +18,8 @@
 #clickY <- 623
   #plotPixel_fooTS(yData, clickX, clickY)
 
-plotPixel_pgrTS <- function( yData, clickX, clickY){  
+plotPixel_pgrTS <- function( yData, clickXY){ 
+  #print(paste0( "This is clicks from pgrPlot: ",clickXY))
   
   #hide("help_text")
   
@@ -31,6 +32,12 @@ plotPixel_pgrTS <- function( yData, clickX, clickY){
     #Set height of coordinates text
     coord.text.y = round_any(max(inData1$Pasture.Growth)+10,10,f=floor)
     
+    if(is.numeric(clickXY)){
+      coordLabel <- paste0("Location: ", round(clickXY[1], 3),", ", round(clickXY[2], 3))
+    }else{
+      coordLabel <- "<NA>"
+    }
+    
     
     pltTS <-   ggplot(data=inData1, 
                   aes(x=Week, y=Pasture.Growth)) + 
@@ -39,7 +46,7 @@ plotPixel_pgrTS <- function( yData, clickX, clickY){
            labs(title="Current season pasture growth rate" ,
                 x=NULL, y = "kg Dry Matter /ha/day")+
            annotate(geom="text", x=10, y=coord.text.y, col="black", fontface = "bold", 
-                    label=paste0("Location: ", round(clickX, 3), ",", round(clickY,3))) +
+                    label= coordLabel) +
            scale_x_continuous(limit = c(0, 53), breaks=c(1,5,9,13,17,22, 26, 30,35,39, 44,48),  
                      labels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct", "Nov", "Dec"))+
            theme_bw()+

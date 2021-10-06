@@ -15,11 +15,11 @@ library(reshape2)
 # Limit fileList in this first section if only doing THIS YEAR.  
 
 #  set up for PGR
-startDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/PGR_cumulative"
+startDir <- "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/PGR_cumulative"
 Prefix <- "PGR"
 
 #   set up for FOO
-startDir <- "C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/FOO"
+startDir <- "C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/FOO"
 Prefix="FOO"
 
 ########################
@@ -32,7 +32,7 @@ outFileOthers <- paste0("OtherYears_timeseries_Props_", Prefix)  #this has other
 
 ###if only doing weekly update, limit fileList to THIS YEAR
 fileList <- fileList[18]
-
+print(fileList)
 ###########################
 
   #set up table names
@@ -80,20 +80,20 @@ head(prop.lkup)
   # join the two tables (one to many left join)
 dat.melt <- merge(x = dat.melt1, y = prop.lkup, by.x = c("Region"), by.y = c("XID1"), all.x = T)
 head(dat.melt)
-
+#dat.melt[1:50,]
 
 
 #dat.melt[1:100,]
 
 # this year data 
 thisyrdat <- dat.melt[dat.melt$yr == 2021, ]
-
+thisyrdat[1:50,]
 
 ### CHOOSE DATANAME ###  Could reduce number of columns written out here.
 write.csv(thisyrdat, paste0(startDir, "/", outFileName, ".csv")) 
 #saveRDS(thisyrdat, paste0(startDir, "/", outFileName, ".rds")) 
 
-
+######################################
 if(length(fileList) == 1){
   print("Done updating files for this year.")
 } else{

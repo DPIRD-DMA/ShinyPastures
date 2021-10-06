@@ -27,7 +27,7 @@ lapply(PrefixName, function(Prefix){
 # GIS server
 data.Dir = paste0("//Agspsrgis03/majorinf/Imagery/Satellite/FOOPGR/", Prefix, "/2021/New")  #  Need to use "New" as of May 2021
 # local directory
-out.dir<- paste0("C:/ALL_PROJECTS/PastFromSpace_DRAFT4/PrepData/", Prefix, "/y2021")
+out.dir<- paste0("C:/Users/kholmes/OneDrive - Department of Primary Industries and Regional Development/Documents/Github/ShinyPastures/PrepData/", Prefix, "/y2021")
 # set working directory
 setwd(out.dir)
 

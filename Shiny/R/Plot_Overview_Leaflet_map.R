@@ -51,10 +51,10 @@ LeafletPlot <- function(propname, rPGR, rFOO){
       setView(lat = -32.33, lng = 117.51, zoom = 7) %>%
       addProviderTiles("OpenStreetMap.HOT", group = "Street map")%>% #"Esri.WorldImagery" "Esri.WorldStreetMap" "Esri.DeLorme" "OpenTopoMap"
       addProviderTiles("Esri.WorldImagery", group = "Satellite")%>% #"Esri.WorldImagery" "Esri.WorldStreetMap" "Esri.DeLorme" "OpenTopoMap"
-      addProviderTiles("OpenTopoMap", group = "Topo map")%>% #"Esri.WorldImagery" "Esri.WorldStreetMap" "Esri.DeLorme" "OpenTopoMap"
+      #addProviderTiles("OpenTopoMap", group = "Topo map")%>% #"Esri.WorldImagery" "Esri.WorldStreetMap" "Esri.DeLorme" "OpenTopoMap"
       #inset map showing location
       addMiniMap(
-        tiles = providers$OpenStreetMap.HOT,
+        tiles = providers$OpenStre3168386etMap.HOT,
         toggleDisplay = TRUE, zoomLevelOffset=-5) %>%
       # Button to zoom to broader scale.
       addEasyButton(easyButton(
@@ -80,10 +80,10 @@ LeafletPlot <- function(propname, rPGR, rFOO){
               labels= c("0 - 50", "50 - 100","100 - 300", "300 - 500", "500 - 750", "750 - 1000", "1000 - 1500", " > 1500"),
               group=rfooName) %>%
     
-      addLayersControl(baseGroups = c("Street map", "Satellite", "Topo map"),
+      addLayersControl(baseGroups = c("Street map", "Satellite"), #, "Topo map"
                        overlayGroups = c(rpgrName, rfooName), 
                        options = layersControlOptions(collapsed = FALSE))%>%
-      hideGroup(c(rpgrName, rfooName))%>%  #this makes default 'uncheck' 
+      hideGroup(c(rpgrName, rfooName)) %>%  #this makes default 'uncheck' 
   
     # add property polygons
     addPolygons(data = propname,   
@@ -97,13 +97,13 @@ LeafletPlot <- function(propname, rPGR, rFOO){
                   #color = "#ffea03", # bright yellow
                   color = "#FF4500",  # orange red
                   fillOpacity = 0.0,
-                  bringToFront = TRUE),
-                layerId = ~PROPERTY_I,
+                 bringToFront = TRUE),
+               layerId = ~PROPERTY_I,
                 #popup = paste("Property ID: ", propname$PROPERTY_I,"<br>",
                 #              "Property Name ", propname$PROPERTY_N, "<br>",
                 #              "PIC: ", propname$PIC, "<br>"),
-                group= "Property view") %>% 
-      groupOptions("Property view", zoomLevels = 10:20)
+               group= "Property view") %>% 
+    groupOptions("Property view", zoomLevels = 10:20)
     
 } # END FUNCTION
 

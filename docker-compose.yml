@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+  traefik:
+    # The official v2 Traefik docker image
+    image: traefik:v2.4
+    container_name: traefik
+    ports:
+      # The HTTP(s) port
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./log/traefik.log:/var/log/traefik.log
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      # A directory to store SSL certificate
+      - ./zerossl-dpird:/zerossl-dpird
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  pasture:
+    image: pasture
+    container_name: pasture
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pasture.rule=Host(`pasture-dev.dpird.app`)"
+      - "traefik.http.routers.pasture.entrypoints=websecure"
+      - "traefik.http.routers.pasture.tls.certresolver=zerossl-dpird"
+      - "traefik.http.routers.pasture.tls.domains[0].main=pasture-dev.dpird.app"
+    volumes:
+      - ../pasture/Shiny/data:/srv/shiny-server/data
