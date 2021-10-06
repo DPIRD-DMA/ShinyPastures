@@ -17,6 +17,22 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
 
+  rstudio:
+    image: rocker/geospatial:4.1.1
+    container_name: rstudio
+    environment:
+      - PASSWORD=karen
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rstudio.rule=Host(`rstudio-karen.dpird.app`)"
+      - "traefik.http.routers.rstudio.entrypoints=websecure"
+      - "traefik.http.routers.rstudio.tls.certresolver=zerossl-dpird"
+      - "traefik.http.routers.rstudio.tls.domains[0].main=rstudio-karen.dpird.app"
+    volumes:
+      - ./logs:/var/lib/rstudio-server/monitor/log
+      - ./rstudio:/home/rstudio
+      - ./.config/rstudio:/home/rstudio/.config/rstudio
+
   pasture:
     image: pasture
     container_name: pasture
